@@ -1,6 +1,7 @@
 import 'package:ecom_delivery_flutter/app/api_providers/company_data.dart';
 import 'package:ecom_delivery_flutter/app/modules/home/controllers/home_controller.dart';
 import 'package:ecom_delivery_flutter/app/routes/app_pages.dart';
+import 'package:ecom_delivery_flutter/app/services/auth_service.dart';
 import 'package:ecom_delivery_flutter/common/Color.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,8 +9,6 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:badges/badges.dart' as badges;
-
-
 
 class ProfileView extends GetView<HomeController> {
   const ProfileView({Key? key}) : super(key: key);
@@ -45,11 +44,11 @@ class ProfileView extends GetView<HomeController> {
                 CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.grey.shade300,
-                  backgroundImage: user.photo != null
+                  backgroundImage: user.avatarOriginal != null
                       ? CachedNetworkImageProvider(
-                      "${CompanyData.image_file_url}/${user.photo}") // Replace with actual domain
+                          "${CompanyData.image_file_url}/${user.avatarOriginal}") // Replace with actual domain
                       : null,
-                  child: user.photo == null
+                  child: user.avatarOriginal == null
                       ? const Icon(Icons.person, size: 40, color: Colors.white)
                       : null,
                 ),
@@ -58,7 +57,18 @@ class ProfileView extends GetView<HomeController> {
                 // Name
                 Text(
                   user.name ?? 'No Name',
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "User ID: ${user.id.toString()}" ,
+                  style: const TextStyle(
+
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
                 const SizedBox(height: 4),
 
@@ -79,43 +89,28 @@ class ProfileView extends GetView<HomeController> {
                 // Address
                 ListTile(
                   leading: const Icon(Icons.home, color: Colors.white),
-                  title: Text(user.address ?? 'No Address', style: const TextStyle(color: Colors.white70)),
+                  title: Text(user.address ?? 'No Address',
+                      style: const TextStyle(color: Colors.white70)),
                 ),
 
                 // Designation
                 ListTile(
                   leading: const Icon(Icons.work, color: Colors.white),
                   title: Text(
-                    user.designation?.designationName ?? 'No Designation',
+                    user.userType ?? 'No Designation',
                     style: const TextStyle(color: Colors.white70),
                   ),
                 ),
 
-                // Role
                 ListTile(
-                  leading: const Icon(Icons.verified_user, color: Colors.white),
-                  title: Text(
-                    user.role?.roleName ?? 'No Role',
-                    style: const TextStyle(color: Colors.white70),
-                  ),
-                ),
-
-                // Department
-                ListTile(
-                  leading: const Icon(Icons.apartment, color: Colors.white),
-                  title: Text(
-                    user.department?.departmentName ?? 'No Department',
-                    style: const TextStyle(color: Colors.white70),
-                  ),
-                ),
-
-                // Start Time
-                ListTile(
-                  leading: const Icon(Icons.access_time, color: Colors.white),
-                  title: Text(
-                    "Start Time: ${user.startHour?.toString().padLeft(2, '0')}:${user.startMin?.toString().padLeft(2, '0')}",
-                    style: const TextStyle(color: Colors.white70),
-                  ),
+                  leading:
+                      Icon(Icons.exit_to_app, color: AppColors.redTextColor),
+                  title: Text('Log Out',
+                      style: TextStyle(color: AppColors.redTextColor)),
+                  onTap: () {
+                    Get.find<AuthService>().removeCurrentUser();
+                    Get.toNamed(Routes.SPLASHSCREEN);
+                  },
                 ),
               ],
             ),
@@ -125,4 +120,3 @@ class ProfileView extends GetView<HomeController> {
     );
   }
 }
-

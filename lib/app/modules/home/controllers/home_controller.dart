@@ -1,6 +1,8 @@
+import 'package:ecom_delivery_flutter/app/models/delivery/delivery_report.dart';
 import 'package:ecom_delivery_flutter/app/models/profile_model.dart';
 
 import 'package:ecom_delivery_flutter/app/repositories/auth_repositories.dart';
+import 'package:ecom_delivery_flutter/app/repositories/delivery_rep.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:get/get.dart';
@@ -28,7 +30,7 @@ class HomeController extends GetxController {
   final hideChatBox = false.obs;
 
   final userID = 0.obs;
-
+  final deliveryReport = DeliveryReportModel().obs;
   final box = GetStorage().obs;
   final contactsResult = <Contact>[].obs;
   final profileData = ProfileData().obs;
@@ -37,7 +39,7 @@ class HomeController extends GetxController {
   Future<void> onInit() async {
     userID.value = Get.find<AuthService>().currentUser.value.data!.user.id;
     getProfile();
-
+    reportDeliveryController();
     super.onInit();
     print('HomeController.onInit');
   }
@@ -62,6 +64,23 @@ class HomeController extends GetxController {
         Get.find<AuthService>().removeCurrentUser();
 
         Get.toNamed(Routes.SPLASHSCREEN);
+      }
+    });
+  }
+
+  reportDeliveryController() {
+    DeliveryRepository().reportDelivery(userID.value.toString()).then((e) {
+      print("reportDelivery data is $e");
+
+      try {
+        if (e['status'] == 'success') {
+          DeliveryReportModel model = DeliveryReportModel.fromJson(e);
+          deliveryReport.value = model;
+        }
+      } catch (err) {
+
+      } finally {
+
       }
     });
   }

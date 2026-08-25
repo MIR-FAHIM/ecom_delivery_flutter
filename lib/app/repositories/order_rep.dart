@@ -8,7 +8,7 @@ import 'package:ecom_delivery_flutter/app/api_providers/api_url.dart';
 
 import 'package:ecom_delivery_flutter/app/services/auth_service.dart';
 
-class AuthRepository {
+class OrderRepository {
   final userdata = GetStorage();
 
   ///User login api call
@@ -27,11 +27,20 @@ class AuthRepository {
     return response;
   }
 
-  getProfile(String userID) async {
+  orderDetail(String orderId) async {
     APIManager _manager = APIManager();
-    final response = await _manager.getWithHeader(ApiClient.getProfile + userID, {});
+    final response = await _manager.getWithHeader(ApiClient.orderDetail + orderId, {});
 
-    print('user profile: ${response}');
+    print('orderDetail 34345: ${response}');
+
+    return response;
+  }
+
+  changeOrderStatus(String orderId, String status) async {
+    APIManager _manager = APIManager();
+    final response = await _manager.patchWithHeader(ApiClient.changeOrderStatus + orderId + '?status=$status', {});
+
+    print('changeOrderStatus 2323: ${response}');
 
     return response;
   }

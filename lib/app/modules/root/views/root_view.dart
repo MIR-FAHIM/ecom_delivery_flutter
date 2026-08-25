@@ -1,3 +1,4 @@
+import 'package:ecom_delivery_flutter/app/modules/delivery/controller/delivery_controller.dart';
 import 'package:ecom_delivery_flutter/common/Color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,7 +38,6 @@ class RootView extends GetView<RootController> {
           endDrawer: MainDrawerWidget(),
           bottomNavigationBar: BottomAppBar(
             color: AppColors.backgroundColor,
-
             child: Container(
               height: 60,
               decoration: BoxDecoration(
@@ -51,7 +51,7 @@ class RootView extends GetView<RootController> {
                 ],
               ),
               child: Row(
-mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   _BottomBarItem(
                     icon: 'assets/icons/home.png',
@@ -68,7 +68,7 @@ mainAxisAlignment: MainAxisAlignment.spaceAround,
                     isSelected: controller.currentIndex.value == 1,
                     onTap: () {
                       controller.currentIndex.value = 1;
-                      Get.lazyPut<HomeController>(() => HomeController());
+                      Get.lazyPut<DeliveryController>(() => DeliveryController());
                     },
                   ),
                   _BottomBarItem(
@@ -77,7 +77,7 @@ mainAxisAlignment: MainAxisAlignment.spaceAround,
                     isSelected: controller.currentIndex.value == 2,
                     onTap: () {
                       controller.currentIndex.value = 2;
-                      Get.lazyPut<HomeController>(() => HomeController());
+                      Get.lazyPut<DeliveryController>(() => DeliveryController());
                     },
                   ),
                   _BottomBarItem(
